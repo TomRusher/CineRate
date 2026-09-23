@@ -7,10 +7,17 @@ chrome.runtime.onMessage.addListener((pozadavek, odesilatel, odeslatOdpoved) => 
                 try {
                     let match = null;
 
-                    // 1. Chytrá detekce podle názvu (vybere přesnou shodu s URL slugi)
+                    // 1. Chytrá detekce podle názvu s odstraněním kino-přívlastků
                     if (pozadavek.nazev) {
-                        let upravenyNazev = pozadavek.nazev
+                        let cistyNazev = pozadavek.nazev
                             .toLowerCase()
+                            .replace(/special edition/g, '')
+                            .replace(/extended edition/g, '')
+                            .replace(/director's cut/g, '')
+                            .replace(/remastered/g, '')
+                            .replace(/ IMAX /g, ' ');
+
+                        let upravenyNazev = cistyNazev
                             .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                             .replace(/[^a-z0-9]+/g, '-')
                             .replace(/(^-|-$)/g, '');

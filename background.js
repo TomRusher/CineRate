@@ -1,15 +1,69 @@
-// Tento skript běží na pozadí a nemá omezení jako web kina
 chrome.runtime.onMessage.addListener((pozadavek, odesilatel, odeslatOdpoved) => {
-    
-    // Pokud nás content.js poprosí o stažení ČSFD
+    // --- ČSFD ---
     if (pozadavek.akce === "stahniCSFD") {
-        console.log("Stahuji data z URL: " + pozadavek.url);
-        
         fetch(pozadavek.url)
-            .then(odpoved => odpoved.text()) // Získáme surový HTML kód stránky
-            .then(htmlText => odeslatOdpoved({ html: htmlText }))
-            .catch(chyba => odeslatOdpoved({ chyba: true }));
+            .then(odpoved => odpoved.text())
+            .then(async htmlText => {
+                try {
+                    let match = null;
+
+                    // 1. Chytrá detekce podle názvu (vybere přesnou shodu s URL slugi)
+                    if (pozadavek.nazev) {
+                        let upravenyNazev = pozadavek.nazev
+                            .toLowerCase()
+                            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                            .replace(/[^a-z0-9]+/g, '-')
+                            .replace(/(^-|-$)/g, '');
+
+                        let regexPresny = new RegExp('href="(\\/film\\/\\d+-' + upravenyNazev + '[^"]*)"', 'i');
+                        match = htmlText.match(regexPresny);
+                    }
+
+                    // 2. Fallback: Pokud přesnou shodu nenajde, vezme první výsledek
+                    if (!match) {
+                        match = htmlText.match(/href="(\/film\/[^"]+)"/);
+                    }
+
+                    if (match && match[1]) {
+                        let filmUrl = 'https://www.csfd.cz' + match[1];
+                        const detailOdpoved = await fetch(filmUrl);
+                        const detailHtml = await detailOdpoved.text();
+                        odeslatOdpoved({ success: true, url: filmUrl, detailHtml: detailHtml });
+                    } else {
+                        odeslatOdpoved({ success: false });
+                    }
+                } catch (e) {
+                    odeslatOdpoved({ success: false });
+                }
+            })
+            .catch(() => odeslatOdpoved({ success: false }));
             
-        return true; // Toto říká prohlížeči: "Počkej na asynchronní odpověď, nezavírej to hned."
+        return true;
+    }
+
+    // --- IMDb ---
+    if (pozadavek.akce === "stahniIMDb") {
+        fetch(pozadavek.url)
+            .then(odpoved => odpoved.text())
+            .then(async htmlText => {
+                try {
+                    const match = htmlText.match(/href="(\/title\/tt\d+[^"]*)"/);
+                    if (match && match[1]) {
+                        let cistaUrl = match[1].split('?')[0];
+                        let filmUrl = 'https://www.imdb.com' + cistaUrl;
+                        
+                        const detailOdpoved = await fetch(filmUrl);
+                        const detailHtml = await detailOdpoved.text();
+                        odeslatOdpoved({ success: true, url: filmUrl, detailHtml: detailHtml });
+                    } else {
+                        odeslatOdpoved({ success: false });
+                    }
+                } catch (e) {
+                    odeslatOdpoved({ success: false });
+                }
+            })
+            .catch(() => odeslatOdpoved({ success: false }));
+            
+        return true;
     }
 });

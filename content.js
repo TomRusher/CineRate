@@ -66,6 +66,7 @@ const imdbSvgHover = chranitSvg(`<svg width="48" height="26" viewBox="0 0 48 26"
 </defs>
 </svg>`);
 
+<<<<<<< HEAD
 async function pridejHodnoceni() {
     const elementyFilmu = document.querySelectorAll('.qb-movie-name, h1.upper-case');
     if (elementyFilmu.length === 0) return;
@@ -87,12 +88,25 @@ async function pridejHodnoceni() {
             
             return; // Ukončíme běh pro tento film, aby se znovu nestahovala data
         }
+=======
+function pridejHodnoceni() {
+    const elementyFilmu = document.querySelectorAll('.qb-movie-name, h1.upper-case');
+    
+    if (elementyFilmu.length === 0) return;
+
+    elementyFilmu.forEach((el) => {
+        if (el.querySelector('.cinerate-container')) return;
+>>>>>>> 71b2a64b8298f42238c779ba7c6d1255460a22a9
 
         let nazevFilmu = el.innerText.trim();
         nazevFilmu = nazevFilmu.replace(/SLAVTE S NÁMI:\s*/gi, '').trim();
 
         if (nazevFilmu.length < 2 || nazevFilmu.length > 50) return;
 
+<<<<<<< HEAD
+=======
+        // Oříznutí přívlastků přímo v content.js
+>>>>>>> 71b2a64b8298f42238c779ba7c6d1255460a22a9
         let cistyNazevProCsfd = nazevFilmu
             .replace(/special edition/gi, '')
             .replace(/extended edition/gi, '')
@@ -110,15 +124,22 @@ async function pridejHodnoceni() {
 
         // --- ČSFD TLAČÍTKO ---
         const csfdBtn = document.createElement('a');
+<<<<<<< HEAD
         csfdBtn.className = 'cine-csfd'; // Pomocná třída pro skrývání
+=======
+>>>>>>> 71b2a64b8298f42238c779ba7c6d1255460a22a9
         const zakladniCsfdUrl = `https://www.csfd.cz/hledat/?q=${encodeURIComponent(cistyNazevProCsfd)}`;
         csfdBtn.href = zakladniCsfdUrl;
         csfdBtn.target = '_blank';
         
         csfdBtn.style.backgroundColor = '#BA0305';
         csfdBtn.style.color = 'white';
+<<<<<<< HEAD
         // Hned při vytvoření nastavíme viditelnost
         csfdBtn.style.display = nastaveni.showCsfd ? 'inline-flex' : 'none';
+=======
+        csfdBtn.style.display = 'inline-flex';
+>>>>>>> 71b2a64b8298f42238c779ba7c6d1255460a22a9
         csfdBtn.style.alignItems = 'center';
         csfdBtn.style.gap = '0px'; 
         csfdBtn.style.borderRadius = '5px';
@@ -143,7 +164,28 @@ async function pridejHodnoceni() {
             csfdBtn.style.backgroundColor = '#BA0305'; 
         };
 
+<<<<<<< HEAD
         kontejner.appendChild(csfdBtn);
+=======
+        // --- IMDb TLAČÍTKO ---
+        const imdbBtn = document.createElement('a');
+        const zakladniImdbUrl = `https://www.imdb.com/find/?q=${encodeURIComponent(nazevFilmu)}`;
+        imdbBtn.href = zakladniImdbUrl;
+        imdbBtn.target = '_blank';
+        
+        imdbBtn.innerHTML = imdbSvgDefault;
+        imdbBtn.style.display = 'inline-flex';
+        imdbBtn.style.alignItems = 'center';
+        imdbBtn.style.cursor = 'pointer';
+        imdbBtn.style.textDecoration = 'none';
+
+        imdbBtn.onmouseenter = () => { imdbBtn.innerHTML = imdbSvgHover; };
+        imdbBtn.onmouseleave = () => { imdbBtn.innerHTML = imdbSvgDefault; };
+
+        kontejner.appendChild(csfdBtn);
+        kontejner.appendChild(imdbBtn);
+        el.appendChild(kontejner);
+>>>>>>> 71b2a64b8298f42238c779ba7c6d1255460a22a9
 
         // --- STAŽENÍ ČSFD DAT ---
         chrome.runtime.sendMessage({ akce: "stahniCSFD", url: zakladniCsfdUrl, nazev: cistyNazevProCsfd }, (odpoved) => {
@@ -161,6 +203,7 @@ async function pridejHodnoceni() {
                             csfdBtn.querySelector('.cinerate-text').innerText = `ČSFD ${shodaCisla[1]}%`;
                         }
                     }
+<<<<<<< HEAD
                 } catch (e) {}
             }
         });
@@ -184,6 +227,13 @@ async function pridejHodnoceni() {
 
         kontejner.appendChild(imdbBtn);
         el.appendChild(kontejner);
+=======
+                } catch (e) {
+                    console.log("Chyba při parsování ČSFD: ", e);
+                }
+            }
+        });
+>>>>>>> 71b2a64b8298f42238c779ba7c6d1255460a22a9
     });
 }
 

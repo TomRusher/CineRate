@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "CineRate",
+  "version": "1.0",
+  "description": "Ukazuje hodnocení z ČSFD a IMDb na stránkách Cinema City.",
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    }
+  },
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://www.csfd.cz/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.cinemacity.cz/*"],
+      "js": ["content.js"]
+    }
+  ]
+}

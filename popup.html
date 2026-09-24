@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            width: 220px;
+            padding: 15px;
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            margin: 0;
+        }
+        h3 {
+            font-size: 14px;
+            margin: 0 0 12px 0;
+            color: #f5c518;
+            text-align: center;
+        }
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+        .save-btn {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            background-color: #f5c518;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .save-btn:hover {
+            background-color: #e0b416;
+        }
+        .support-box {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #333;
+            text-align: center;
+        }
+        .support-link {
+            color: #FFDD00;
+            font-size: 12px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .support-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h3>CineRate Nastavení </h3>
+    
+    <div class="setting-row">
+        <span>ČSFD hodnocení</span>
+        <input type="checkbox" id="toggleCsfd" checked>
+    </div>
+    
+    <div class="setting-row">
+        <span>IMDb hodnocení</span>
+        <input type="checkbox" id="toggleImdb" checked>
+    </div>
+
+    <button id="saveBtn" class="save-btn">Uložit a obnovit</button>
+
+    <div class="support-box">
+        <a href="https://ko-fi.com/tomrusher" target="_blank" class="support-link">☕ Podpořit tvůrce (Ko-fi)</a>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

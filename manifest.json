@@ -3,9 +3,6 @@
   "name": "CineRate",
   "version": "1.0",
   "description": "Ukazuje hodnocení z ČSFD a IMDb na stránkách Cinema City.",
-  "permissions": [
-    "activeTab"
-  ],
   "host_permissions": [
     "https://www.csfd.cz/*"
   ],
